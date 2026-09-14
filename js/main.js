@@ -298,7 +298,11 @@ function initScrollAnimations() {
   /* --- Generic reveal-on-scroll for sections ---
      Excludes .service-card/.team-card: those get their own tween below
      (with a rotateX/Y flourish) — giving one element two competing
-     opacity/y tweens is what caused the flash-then-disappear bug. */
+     opacity/y tweens is what caused the flash-then-disappear bug.
+     `once: true` is essential here: without it, ScrollTrigger's default
+     behavior REVERSES the reveal when you scroll back up past the trigger
+     point, and stopping mid-reverse is exactly what left text looking
+     half-faded/"greyed out" when scrolling up and down. */
   gsap.utils.toArray(".reveal:not(.service-card):not(.team-card)").forEach((el) => {
     gsap.to(el, {
       opacity: 1,
@@ -308,6 +312,7 @@ function initScrollAnimations() {
       scrollTrigger: {
         trigger: el,
         start: "top 88%",
+        once: true,
       },
     });
   });
@@ -326,6 +331,7 @@ function initScrollAnimations() {
       scrollTrigger: {
         trigger: group,
         start: "top 85%",
+        once: true,
       },
     });
   });
@@ -334,7 +340,8 @@ function initScrollAnimations() {
      These also carry the .reveal class, so give them their rotateX/Y
      flourish on the SAME tween as the generic reveal above instead of a
      second competing tween — two GSAP tweens fighting over the same
-     opacity/y on one element causes a visible flash/snap. */
+     opacity/y on one element causes a visible flash/snap. `once: true`
+     for the same reason as above: never reverse/re-fade on scroll-up. */
   gsap.utils.toArray(".service-card.reveal, .team-card.reveal").forEach((card, i) => {
     gsap.fromTo(
       card,
@@ -349,6 +356,7 @@ function initScrollAnimations() {
         scrollTrigger: {
           trigger: card,
           start: "top 90%",
+          once: true,
         },
       }
     );
@@ -361,7 +369,7 @@ function initScrollAnimations() {
       opacity: 0,
       duration: 0.7,
       ease: "power2.out",
-      scrollTrigger: { trigger: item, start: "top 92%" },
+      scrollTrigger: { trigger: item, start: "top 92%", once: true },
     });
   });
 }
