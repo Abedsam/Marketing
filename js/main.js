@@ -257,8 +257,11 @@ function initScrollAnimations() {
     });
   });
 
-  /* --- Generic reveal-on-scroll for sections --- */
-  gsap.utils.toArray(".reveal").forEach((el) => {
+  /* --- Generic reveal-on-scroll for sections ---
+     Excludes .service-card/.team-card: those get their own tween below
+     (with a rotateX/Y flourish) — giving one element two competing
+     opacity/y tweens is what caused the flash-then-disappear bug. */
+  gsap.utils.toArray(".reveal:not(.service-card):not(.team-card)").forEach((el) => {
     gsap.to(el, {
       opacity: 1,
       y: 0,
@@ -271,9 +274,11 @@ function initScrollAnimations() {
     });
   });
 
-  /* --- Staggered groups --- */
+  /* --- Staggered groups ---
+     Same exclusion as above: service/team cards get their own tween. */
   gsap.utils.toArray("[data-stagger]").forEach((group) => {
-    const items = group.querySelectorAll(".reveal");
+    const items = group.querySelectorAll(".reveal:not(.service-card):not(.team-card)");
+    if (!items.length) return;
     gsap.to(items, {
       opacity: 1,
       y: 0,
@@ -287,20 +292,28 @@ function initScrollAnimations() {
     });
   });
 
-  /* --- 3D tilt drift for service/team cards on scroll --- */
-  gsap.utils.toArray(".service-card, .team-card").forEach((card, i) => {
-    gsap.from(card, {
-      rotateY: i % 2 === 0 ? -10 : 10,
-      rotateX: 8,
-      y: 60,
-      opacity: 0,
-      duration: 1,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: card,
-        start: "top 90%",
-      },
-    });
+  /* --- 3D tilt drift for service/team cards on scroll ---
+     These also carry the .reveal class, so give them their rotateX/Y
+     flourish on the SAME tween as the generic reveal above instead of a
+     second competing tween — two GSAP tweens fighting over the same
+     opacity/y on one element causes a visible flash/snap. */
+  gsap.utils.toArray(".service-card.reveal, .team-card.reveal").forEach((card, i) => {
+    gsap.fromTo(
+      card,
+      { rotateY: i % 2 === 0 ? -10 : 10, rotateX: 8 },
+      {
+        rotateY: 0,
+        rotateX: 0,
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: card,
+          start: "top 90%",
+        },
+      }
+    );
   });
 
   /* --- Timeline items --- */
@@ -312,15 +325,6 @@ function initScrollAnimations() {
       ease: "power2.out",
       scrollTrigger: { trigger: item, start: "top 92%" },
     });
-  });
-
-  /* --- Page hero (subpages) fade/slide in --- */
-  gsap.from(".page-hero .reveal", {
-    y: 30,
-    opacity: 0,
-    duration: 0.8,
-    stagger: 0.1,
-    ease: "power3.out",
   });
 }
 
