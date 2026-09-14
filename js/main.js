@@ -50,7 +50,11 @@ function initYear() {
   if (el) el.textContent = new Date().getFullYear();
 }
 
-/* ---------------- 3D Hero (Three.js) ---------------- */
+/* ---------------- Hero particle constellation (Three.js) ----------------
+   Signature visual: a dense cloud of tiny triangular glyphs in a full
+   chromatic spectrum, arranged into an organic blob/brain-like shape with
+   a lighter ambient field scattered around it — "knowledge as distributed
+   intelligence" rendered on the white canvas instead of a black void. */
 function initHeroCanvas() {
   const canvas = document.getElementById("hero-canvas");
   if (!canvas || typeof THREE === "undefined") return;
@@ -59,93 +63,116 @@ function initHeroCanvas() {
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(
-    55,
+    50,
     canvas.clientWidth / canvas.clientHeight,
     0.1,
     100
   );
-  camera.position.set(0, 0, 9);
+  camera.position.set(0, 0, 11);
 
-  const renderer = new THREE.WebGLRenderer({
-    canvas,
-    alpha: true,
-    antialias: true,
-  });
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
   const group = new THREE.Group();
+  // Shift the constellation toward the right column of the two-col hero.
+  group.position.x = 2.4;
   scene.add(group);
 
-  // Node points forming a "direct line" network
-  const NODE_COUNT = 90;
-  const nodePositions = [];
-  const nodeGeo = new THREE.BufferGeometry();
-  const positions = new Float32Array(NODE_COUNT * 3);
-  for (let i = 0; i < NODE_COUNT; i++) {
-    const radius = 3.6 + Math.random() * 2.4;
+  // A small triangle sprite texture, drawn once on a canvas — this is what
+  // lets THREE.Points render actual outlined triangles instead of dots.
+  function makeTriangleTexture() {
+    const size = 64;
+    const c = document.createElement("canvas");
+    c.width = size;
+    c.height = size;
+    const ctx = c.getContext("2d");
+    ctx.clearRect(0, 0, size, size);
+    ctx.beginPath();
+    ctx.moveTo(size / 2, size * 0.08);
+    ctx.lineTo(size * 0.92, size * 0.88);
+    ctx.lineTo(size * 0.08, size * 0.88);
+    ctx.closePath();
+    ctx.lineWidth = size * 0.09;
+    ctx.strokeStyle = "#ffffff";
+    ctx.stroke();
+    const tex = new THREE.CanvasTexture(c);
+    tex.needsUpdate = true;
+    return tex;
+  }
+  const triangleTexture = makeTriangleTexture();
+
+  // Brand-spectrum palette: violet + amber (primary system accents), the
+  // real logo's wine-red, plus teal/magenta/blue for chromatic range.
+  const palette = [
+    0x8052ff, 0x8052ff, 0x8052ff, // violet dominates, as the primary accent
+    0xffb829, 0xffb829, // amber
+    0x681523, // real brand wine-red
+    0x15846e, // teal
+    0xc23fb0, // magenta
+    0x3f7dc2, // blue
+  ];
+
+  function buildParticleField(count, shapeFn, avgSize, opacity) {
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    const color = new THREE.Color();
+    for (let i = 0; i < count; i++) {
+      const p = shapeFn(i);
+      positions[i * 3] = p.x;
+      positions[i * 3 + 1] = p.y;
+      positions[i * 3 + 2] = p.z;
+      color.setHex(palette[Math.floor(Math.random() * palette.length)]);
+      colors[i * 3] = color.r;
+      colors[i * 3 + 1] = color.g;
+      colors[i * 3 + 2] = color.b;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+    const mat = new THREE.PointsMaterial({
+      size: avgSize,
+      map: triangleTexture,
+      alphaTest: 0.2,
+      transparent: true,
+      opacity,
+      vertexColors: true,
+      sizeAttenuation: true,
+    });
+    return new THREE.Points(geo, mat);
+  }
+
+  // Organic "brain-like" blob: two overlapping lobes with noisy radius.
+  function brainShape(seed) {
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(Math.random() * 2 - 1);
-    const x = radius * Math.sin(phi) * Math.cos(theta);
-    const y = radius * Math.sin(phi) * Math.sin(theta) * 0.6;
-    const z = radius * Math.cos(phi);
-    positions[i * 3] = x;
-    positions[i * 3 + 1] = y;
-    positions[i * 3 + 2] = z;
-    nodePositions.push(new THREE.Vector3(x, y, z));
+    const lobe = Math.random() < 0.5 ? -1 : 1;
+    const base = 2.1;
+    const noise = 0.35 * Math.sin(seed * 12.9) * Math.cos(seed * 7.3);
+    const r = base + noise + Math.random() * 0.5;
+    const x = r * Math.sin(phi) * Math.cos(theta) * 0.85 + lobe * 0.55;
+    const y = r * Math.sin(phi) * Math.sin(theta) * 0.72;
+    const z = r * Math.cos(phi) * 0.85;
+    return { x, y, z };
   }
-  nodeGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
-  const nodeMat = new THREE.PointsMaterial({
-    color: 0x681523,
-    size: 0.07,
-    transparent: true,
-    opacity: 0.85,
-    sizeAttenuation: true,
-  });
-  const points = new THREE.Points(nodeGeo, nodeMat);
-  group.add(points);
-
-  // Connecting "direct lines" between nearby nodes
-  const lineVerts = [];
-  const MAX_DIST = 2.1;
-  for (let i = 0; i < nodePositions.length; i++) {
-    for (let j = i + 1; j < nodePositions.length; j++) {
-      if (nodePositions[i].distanceTo(nodePositions[j]) < MAX_DIST) {
-        lineVerts.push(nodePositions[i].x, nodePositions[i].y, nodePositions[i].z);
-        lineVerts.push(nodePositions[j].x, nodePositions[j].y, nodePositions[j].z);
-      }
-    }
+  // Sparse ambient field drifting further out, lower density.
+  function ambientShape() {
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(Math.random() * 2 - 1);
+    const r = 3.4 + Math.random() * 3.2;
+    return {
+      x: r * Math.sin(phi) * Math.cos(theta),
+      y: r * Math.sin(phi) * Math.sin(theta) * 0.8,
+      z: r * Math.cos(phi) * 0.6,
+    };
   }
-  const lineGeo = new THREE.BufferGeometry();
-  lineGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(lineVerts), 3));
-  const lineMat = new THREE.LineBasicMaterial({
-    color: 0x8c1f30,
-    transparent: true,
-    opacity: 0.14,
-  });
-  const lines = new THREE.LineSegments(lineGeo, lineMat);
-  group.add(lines);
 
-  // A glowing golden "signal" core
-  const coreGeo = new THREE.IcosahedronGeometry(1.15, 1);
-  const coreMat = new THREE.MeshBasicMaterial({
-    color: 0x96712a,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.45,
-  });
-  const core = new THREE.Mesh(coreGeo, coreMat);
-  group.add(core);
-
-  const coreGlowGeo = new THREE.IcosahedronGeometry(0.9, 1);
-  const coreGlowMat = new THREE.MeshBasicMaterial({
-    color: 0xecc987,
-    transparent: true,
-    opacity: 0.12,
-  });
-  group.add(new THREE.Mesh(coreGlowGeo, coreGlowMat));
-
-  group.rotation.x = 0.15;
+  const brainCount = window.innerWidth < 700 ? 900 : 1800;
+  const ambientCount = window.innerWidth < 700 ? 220 : 420;
+  const brainPoints = buildParticleField(brainCount, brainShape, 0.075, 0.95);
+  const ambientPoints = buildParticleField(ambientCount, ambientShape, 0.045, 0.4);
+  group.add(brainPoints);
+  group.add(ambientPoints);
 
   function resize() {
     const { clientWidth, clientHeight } = canvas;
@@ -170,25 +197,24 @@ function initHeroCanvas() {
     const t = clock.getElapsedTime();
 
     if (!prefersReducedMotion) {
-      group.rotation.y = t * 0.08;
-      core.rotation.y = -t * 0.35;
-      core.rotation.x = t * 0.2;
-      const pulse = 1 + Math.sin(t * 1.6) * 0.06;
-      core.scale.setScalar(pulse);
+      group.rotation.y = t * 0.06;
+      brainPoints.rotation.z = Math.sin(t * 0.15) * 0.05;
+      ambientPoints.rotation.y = -t * 0.03;
     }
 
-    camera.position.x += (mouseX * 1.1 - camera.position.x) * 0.03;
-    camera.position.y += (-mouseY * 0.7 - camera.position.y) * 0.03;
-    camera.lookAt(0, 0, 0);
+    camera.position.x += (mouseX * 0.6 - camera.position.x) * 0.03;
+    camera.position.y += (-mouseY * 0.4 - camera.position.y) * 0.03;
+    camera.lookAt(group.position.x * 0.3, 0, 0);
 
     renderer.render(scene, camera);
   }
   animate();
 
-  // Push the whole network back / fade as the user scrolls past the hero
+  // Drift the constellation back and fade slightly as the user scrolls
+  // past the hero, matching the rest of the scroll-fade choreography.
   if (window.gsap && window.ScrollTrigger) {
     gsap.to(group.position, {
-      z: -4,
+      z: -3,
       scrollTrigger: {
         trigger: ".hero",
         start: "top top",
@@ -197,7 +223,7 @@ function initHeroCanvas() {
       },
     });
     gsap.to(canvas, {
-      opacity: 0.15,
+      opacity: 0.2,
       scrollTrigger: {
         trigger: ".hero",
         start: "top top",
@@ -235,12 +261,7 @@ function initScrollAnimations() {
     .from(".hero-title .line", { y: 60, opacity: 0, duration: 0.9, stagger: 0.08 }, "-=0.4")
     .from(".hero-sub", { y: 24, opacity: 0, duration: 0.7 }, "-=0.5")
     .from(".hero-actions > *", { y: 20, opacity: 0, duration: 0.6, stagger: 0.1 }, "-=0.4")
-    .from(".hero-meta > *", { y: 16, opacity: 0, duration: 0.5, stagger: 0.08 }, "-=0.3")
-    .from(
-      ".hero-card",
-      { y: 50, opacity: 0, rotateX: 20, duration: 1, stagger: 0.15, transformOrigin: "center" },
-      "-=0.9"
-    );
+    .from(".hero-meta > *", { y: 16, opacity: 0, duration: 0.5, stagger: 0.08 }, "-=0.3");
 
   /* --- Hero scroll animation: headline scales/tilts away, cards drift in 3D ---
      Uses fromTo with an explicit, pinned start state (opacity: 1, y: 0)
@@ -266,27 +287,6 @@ function initScrollAnimations() {
       },
     }
   );
-
-  gsap.utils.toArray(".hero-card").forEach((card, i) => {
-    gsap.fromTo(
-      card,
-      { z: 0, rotateX: 0, y: 0, opacity: 1 },
-      {
-        z: -120 - i * 40,
-        rotateX: 12,
-        y: (i % 2 === 0 ? -1 : 1) * 60,
-        opacity: 0.15,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".hero",
-          start: "top top",
-          end: "bottom top",
-          scrub: 0.6,
-          invalidateOnRefresh: true,
-        },
-      }
-    );
-  });
 
   // Web fonts can finish loading after ScrollTrigger's initial measurement,
   // subtly changing the hero's height/line-heights; re-measure once they're
