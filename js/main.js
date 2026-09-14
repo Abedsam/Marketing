@@ -12,6 +12,18 @@ document.addEventListener("DOMContentLoaded", () => {
   initYear();
 });
 
+/* Fix for content looking broken/blank after using the browser Back button:
+   when a page is restored from the back/forward cache (or reloaded at a
+   scroll position other than the top), ScrollTrigger's cached element
+   positions can be stale, leaving sections stuck mid-animation or hidden.
+   Recalculating on every "pageshow" (which also fires on normal loads) is
+   the standard fix. */
+window.addEventListener("pageshow", () => {
+  if (window.ScrollTrigger) {
+    ScrollTrigger.refresh();
+  }
+});
+
 /* ---------------- Navigation ---------------- */
 function initNav() {
   const header = document.querySelector(".site-header");
@@ -230,32 +242,58 @@ function initScrollAnimations() {
       "-=0.9"
     );
 
-  /* --- Hero scroll animation: headline scales/tilts away, cards drift in 3D --- */
-  gsap.to(".hero-title, .hero-sub, .hero-actions, .hero-meta", {
-    y: -80,
-    opacity: 0,
-    scrollTrigger: {
-      trigger: ".hero",
-      start: "top top",
-      end: "60% top",
-      scrub: 0.6,
-    },
-  });
-
-  gsap.utils.toArray(".hero-card").forEach((card, i) => {
-    gsap.to(card, {
-      z: -120 - i * 40,
-      rotateX: 12,
-      y: (i % 2 === 0 ? -1 : 1) * 60,
-      opacity: 0.15,
+  /* --- Hero scroll animation: headline scales/tilts away, cards drift in 3D ---
+     Uses fromTo with an explicit, pinned start state (opacity: 1, y: 0)
+     instead of gsap.to(), which only captures its "from" value implicitly
+     from whatever the element's current style happens to be. That implicit
+     capture could be thrown off by web fonts loading late and reflowing the
+     hero (changing its height after ScrollTrigger first measured it), which
+     left the text stuck partly faded even after scrolling back to the top.
+     invalidateOnRefresh + the fonts.ready refresh below keep it correct. */
+  gsap.fromTo(
+    ".hero-title, .hero-sub, .hero-actions, .hero-meta",
+    { opacity: 1, y: 0 },
+    {
+      y: -80,
+      opacity: 0,
+      ease: "none",
       scrollTrigger: {
         trigger: ".hero",
         start: "top top",
-        end: "bottom top",
+        end: "60% top",
         scrub: 0.6,
+        invalidateOnRefresh: true,
       },
-    });
+    }
+  );
+
+  gsap.utils.toArray(".hero-card").forEach((card, i) => {
+    gsap.fromTo(
+      card,
+      { z: 0, rotateX: 0, y: 0, opacity: 1 },
+      {
+        z: -120 - i * 40,
+        rotateX: 12,
+        y: (i % 2 === 0 ? -1 : 1) * 60,
+        opacity: 0.15,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+        },
+      }
+    );
   });
+
+  // Web fonts can finish loading after ScrollTrigger's initial measurement,
+  // subtly changing the hero's height/line-heights; re-measure once they're
+  // ready so scroll-tied animations line up correctly at the very top.
+  if (window.document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => ScrollTrigger.refresh());
+  }
 
   /* --- Generic reveal-on-scroll for sections ---
      Excludes .service-card/.team-card: those get their own tween below
