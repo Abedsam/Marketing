@@ -198,12 +198,17 @@ function initHeroCanvas() {
 
 /* ---------------- Scroll-driven animation (GSAP + ScrollTrigger) ---------------- */
 function initScrollAnimations() {
-  if (!window.gsap || !window.ScrollTrigger) return;
+  if (!window.gsap || !window.ScrollTrigger) {
+    // GSAP failed to load (e.g. CDN blocked) — .reveal elements are hidden
+    // by default in CSS, so un-hide them directly instead of leaving the
+    // page permanently blank.
+    document.querySelectorAll(".reveal").forEach((el) => {
+      el.style.opacity = "1";
+      el.style.transform = "none";
+    });
+    return;
+  }
   gsap.registerPlugin(ScrollTrigger);
-
-  // Only now opt into the CSS hidden starting state for .reveal elements —
-  // keeps content visible by default if this script never runs.
-  document.documentElement.classList.add("js-anim");
 
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduced) {

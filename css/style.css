@@ -630,10 +630,11 @@ ul { list-style: none; margin: 0; padding: 0; }
 @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
 
 /* ================= Reveal utility (driven by GSAP ScrollTrigger) =================
-   Elements are visible by default so content never disappears if the GSAP CDN
-   fails to load; main.js opts into the hidden starting state only once GSAP
-   is confirmed present (see the "js-anim" class on <html>). */
-.js-anim .reveal { opacity: 0; transform: translateY(40px); }
+   Hidden from first paint so there is no visible flash of text before the
+   fade-in starts. If GSAP fails to load, main.js's early-return fallback
+   un-hides these elements directly (see initScrollAnimations in main.js) so
+   content never gets stuck invisible. */
+.reveal { opacity: 0; transform: translateY(40px); }
 
 /* ================= Section divider glow ================= */
 .glow-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(104,21,35,0.35), transparent); }
