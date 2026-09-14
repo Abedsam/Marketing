@@ -84,7 +84,7 @@ function initHeroCanvas() {
   nodeGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
   const nodeMat = new THREE.PointsMaterial({
-    color: 0x4f8cff,
+    color: 0xdbae5c,
     size: 0.07,
     transparent: true,
     opacity: 0.85,
@@ -107,17 +107,17 @@ function initHeroCanvas() {
   const lineGeo = new THREE.BufferGeometry();
   lineGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(lineVerts), 3));
   const lineMat = new THREE.LineBasicMaterial({
-    color: 0x2f6fed,
+    color: 0x8c1f30,
     transparent: true,
-    opacity: 0.18,
+    opacity: 0.22,
   });
   const lines = new THREE.LineSegments(lineGeo, lineMat);
   group.add(lines);
 
-  // A glowing orange "signal" core
+  // A glowing golden "signal" core
   const coreGeo = new THREE.IcosahedronGeometry(1.15, 1);
   const coreMat = new THREE.MeshBasicMaterial({
-    color: 0xff6a3d,
+    color: 0xc9973f,
     wireframe: true,
     transparent: true,
     opacity: 0.55,
@@ -127,7 +127,7 @@ function initHeroCanvas() {
 
   const coreGlowGeo = new THREE.IcosahedronGeometry(0.9, 1);
   const coreGlowMat = new THREE.MeshBasicMaterial({
-    color: 0xff8a5c,
+    color: 0xecc987,
     transparent: true,
     opacity: 0.12,
   });
