@@ -41,7 +41,7 @@
 </header>
 
 <!-- ================= HERO ================= -->
-<section class="hero">
+<section class="hero" id="sec-start">
   <canvas id="hero-canvas"></canvas>
   <div class="container hero-inner">
     <div class="hero-content">
@@ -80,10 +80,6 @@
     </div>
     <div class="hero-visual"></div>
   </div>
-  <div class="scroll-cue">
-    <span>Scrollen</span>
-    <span class="line"></span>
-  </div>
 </section>
 
 <!-- ================= STATS BAR ================= -->
@@ -109,7 +105,7 @@
 </section>
 
 <!-- ================= SERVICES PREVIEW ================= -->
-<section class="section" data-stagger>
+<section class="section" data-stagger id="sec-leistungen">
   <div class="container">
     <div class="section-head center reveal">
       <div class="eyebrow" style="justify-content:center">Unsere Leistungen</div>
@@ -150,7 +146,7 @@
 </section>
 
 <!-- ================= PARTNERS BAR ================= -->
-<section class="marquee-section">
+<section class="marquee-section" id="sec-partner">
   <div class="container">
     <div class="section-head center reveal" style="margin-bottom:36px;">
       <div class="eyebrow" style="justify-content:center">Vertrauen, das verbindet</div>
@@ -178,7 +174,7 @@
 </section>
 
 <!-- ================= REVIEWS BAR ================= -->
-<section class="marquee-section">
+<section class="marquee-section" id="sec-team">
   <div class="container">
     <div class="section-head center reveal" style="margin-bottom:36px;">
       <div class="eyebrow" style="justify-content:center">4,5 ★ auf Google · 27 Bewertungen</div>
@@ -250,7 +246,7 @@
 </section>
 
 <!-- ================= CTA ================= -->
-<section class="section section--tight">
+<section class="section section--tight" id="sec-kontakt">
   <div class="container">
     <div class="cta-band reveal">
       <div>
@@ -306,6 +302,18 @@
     </div>
   </div>
 </footer>
+
+<!-- ================= DIREKTVERBINDUNG TRACE (signature scroll move) ================= -->
+<nav class="trace-rail" id="traceRail" aria-label="Seitenfortschritt">
+  <div class="trace-track">
+    <div class="trace-fill" id="traceFill"></div>
+    <button class="trace-dot" data-target="sec-start" style="left:0%"><span class="trace-label">Start</span></button>
+    <button class="trace-dot" data-target="sec-leistungen" style="left:25%"><span class="trace-label">Leistungen</span></button>
+    <button class="trace-dot" data-target="sec-partner" style="left:50%"><span class="trace-label">Partner</span></button>
+    <button class="trace-dot" data-target="sec-team" style="left:75%"><span class="trace-label">Team</span></button>
+    <button class="trace-dot" data-target="sec-kontakt" style="left:100%"><span class="trace-label">Kontakt</span></button>
+  </div>
+</nav>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>

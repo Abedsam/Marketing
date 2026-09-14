@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initCounters();
   initTiltCards();
   initYear();
+  initTraceRail();
 });
 
 /* Fix for content looking broken/blank after using the browser Back button:
@@ -439,4 +440,61 @@ function initTiltCards() {
       }
     });
   });
+}
+
+/* ---------------- Direktverbindung trace (signature scroll move) ----------------
+   A literal "direct line" drawn by the scroll itself: independent of GSAP so
+   it keeps working even if that CDN is unavailable. Fills a fixed rail with
+   the brand violet in step with page progress and lights up each section's
+   stop as it is reached; clicking a stop jumps straight to that section. */
+function initTraceRail() {
+  const rail = document.getElementById("traceRail");
+  const fill = document.getElementById("traceFill");
+  if (!rail || !fill) return;
+
+  const dots = Array.from(rail.querySelectorAll(".trace-dot"));
+  const sections = dots
+    .map((dot) => ({ dot, el: document.getElementById(dot.dataset.target) }))
+    .filter((s) => s.el);
+
+  dots.forEach((dot) => {
+    dot.addEventListener("click", () => {
+      const target = document.getElementById(dot.dataset.target);
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  });
+
+  let ticking = false;
+  function update() {
+    ticking = false;
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? Math.min(1, Math.max(0, scrollTop / docHeight)) : 0;
+    fill.style.width = progress * 100 + "%";
+
+    // Stay hidden over the hero itself so the rail never competes with (or
+    // gets covered by) the hero's own last row of content; it fades in once
+    // the visitor actually starts scrolling through the page.
+    rail.classList.toggle("visible", scrollTop > 80);
+
+    const activationLine = scrollTop + window.innerHeight * 0.5;
+    let activeIndex = 0;
+    sections.forEach((s, i) => {
+      if (s.el.offsetTop <= activationLine) activeIndex = i;
+    });
+    sections.forEach((s, i) => s.dot.classList.toggle("active", i === activeIndex));
+  }
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    },
+    { passive: true }
+  );
+  window.addEventListener("resize", update);
+  update();
 }
