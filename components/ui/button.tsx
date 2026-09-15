@@ -9,11 +9,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-[--dl-burgundy] text-[--dl-cream] hover:bg-[--dl-burgundy-hover]",
+        default: "bg-dl-burgundy text-dl-cream hover:bg-dl-burgundy-hover",
         outline:
-          "border border-current bg-transparent hover:bg-[--dl-ink]/5",
-        ghost: "bg-transparent hover:bg-[--dl-ink]/5",
-        dark: "bg-[--dl-rose] text-[--dl-plum] hover:bg-[--dl-rose]/90",
+          "border border-current bg-transparent hover:bg-dl-ink/5",
+        ghost: "bg-transparent hover:bg-dl-ink/5",
+        dark: "bg-dl-rose text-dl-plum hover:bg-dl-rose/90",
       },
       size: {
         default: "h-11 px-6 py-2 text-xs",

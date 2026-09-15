@@ -88,13 +88,13 @@ export default function HomePage() {
         className="relative flex min-h-[92vh] items-center px-5 py-20 sm:px-8"
       >
         <div className="mx-auto max-w-[1280px]">
-          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[--dl-burgundy]">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-dl-burgundy">
             Callcenter Hamburg · seit 1995
           </p>
-          <h1 className="mt-6 max-w-[16ch] text-[clamp(2.4rem,6vw,4.6rem)] text-[--dl-ink]">
+          <h1 className="mt-6 max-w-[16ch] text-[clamp(2.4rem,6vw,4.6rem)] text-dl-ink">
             Wir geben Ihren Zielen eine Stimme.
           </h1>
-          <p className="mt-6 max-w-[56ch] text-lg leading-relaxed text-[--dl-ink]/70">
+          <p className="mt-6 max-w-[56ch] text-lg leading-relaxed text-dl-ink/70">
             250 festangestellte Agents, drei Jahrzehnte Erfahrung und
             hanseatische Verlässlichkeit. Wir übernehmen Inbound, Outbound und
             Terminierung – und liefern messbare Ergebnisse statt
@@ -112,33 +112,33 @@ export default function HomePage() {
       </section>
 
       {/* Kennzahlen */}
-      <section className="relative border-t border-[--dl-ink]/8 bg-[--dl-cream] px-5 py-16 sm:px-8">
+      <section className="relative border-t border-dl-ink/8 bg-dl-cream px-5 py-16 sm:px-8">
         <div className="mx-auto grid max-w-[1280px] grid-cols-2 gap-10 md:grid-cols-4">
           <RevealOnScroll>
-            <p className="font-serif text-4xl text-[--dl-ink]">
+            <p className="font-serif text-4xl text-dl-ink">
               <Counter value={250} suffix="+" />
             </p>
-            <p className="mt-2 text-sm text-[--dl-ink]/60">
+            <p className="mt-2 text-sm text-dl-ink/60">
               Agents in Vollzeit
             </p>
           </RevealOnScroll>
           <RevealOnScroll delay={80}>
-            <p className="font-serif text-4xl text-[--dl-ink]">
+            <p className="font-serif text-4xl text-dl-ink">
               <Counter value={30} />
             </p>
-            <p className="mt-2 text-sm text-[--dl-ink]/60">Jahre am Markt</p>
+            <p className="mt-2 text-sm text-dl-ink/60">Jahre am Markt</p>
           </RevealOnScroll>
           <RevealOnScroll delay={160}>
-            <p className="font-serif text-4xl text-[--dl-ink]">
+            <p className="font-serif text-4xl text-dl-ink">
               <Counter value={3} />
             </p>
-            <p className="mt-2 text-sm text-[--dl-ink]/60">
+            <p className="mt-2 text-sm text-dl-ink/60">
               kununu Top-Company-Siegel
             </p>
           </RevealOnScroll>
           <RevealOnScroll delay={240}>
-            <p className="font-serif text-4xl text-[--dl-ink]">B2B / B2C</p>
-            <p className="mt-2 text-sm text-[--dl-ink]/60">
+            <p className="font-serif text-4xl text-dl-ink">B2B / B2C</p>
+            <p className="mt-2 text-sm text-dl-ink/60">
               Kampagnen aus einer Hand
             </p>
           </RevealOnScroll>
@@ -148,17 +148,17 @@ export default function HomePage() {
       {/* Leistungen */}
       <section
         data-globe="30,18,0.55"
-        className="relative border-t border-[--dl-ink]/8 bg-[--dl-cream] px-5 py-24 sm:px-8"
+        className="relative border-t border-dl-ink/8 bg-dl-cream px-5 py-24 sm:px-8"
       >
         <div className="mx-auto max-w-[1280px]">
           <RevealOnScroll>
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[--dl-burgundy]">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-dl-burgundy">
               01 — Leistungen
             </p>
             <h2 className="mt-4 max-w-[20ch] text-[clamp(1.9rem,3.6vw,2.8rem)]">
               Clever, transparent, individuell.
             </h2>
-            <p className="mt-4 max-w-[60ch] text-[--dl-ink]/70">
+            <p className="mt-4 max-w-[60ch] text-dl-ink/70">
               Jede Kampagne bekommt ihr eigenes Team, ihre eigene
               Gesprächslogik und ein Reporting, das Sie wirklich lesen
               wollen.
@@ -168,12 +168,12 @@ export default function HomePage() {
           <div className="mt-14 grid gap-8 md:grid-cols-3">
             {LEISTUNGEN.map((item, i) => (
               <RevealOnScroll key={item.title} delay={i * 80}>
-                <div className="flex h-full flex-col gap-4 rounded-[2px] border border-[--dl-ink]/10 bg-white/50 p-8">
-                  <span className="font-serif text-3xl text-[--dl-burgundy]">
+                <div className="flex h-full flex-col gap-4 rounded-[2px] border border-dl-ink/10 bg-white/50 p-8">
+                  <span className="font-serif text-3xl text-dl-burgundy">
                     {item.numeral}
                   </span>
                   <h3 className="text-xl">{item.title}</h3>
-                  <p className="text-sm leading-relaxed text-[--dl-ink]/70">
+                  <p className="text-sm leading-relaxed text-dl-ink/70">
                     {item.text}
                   </p>
                 </div>
@@ -184,7 +184,7 @@ export default function HomePage() {
           <RevealOnScroll delay={240}>
             <Link
               href="/call-center-services"
-              className="mt-10 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-[--dl-burgundy]"
+              className="mt-10 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-dl-burgundy"
             >
               Alle Services <ArrowRight size={14} />
             </Link>
@@ -196,17 +196,17 @@ export default function HomePage() {
       <section
         data-globe="52,50,2.1"
         data-globe-dark="true"
-        className="relative overflow-hidden bg-[--dl-plum] px-5 py-24 text-[--dl-text-on-dark] sm:px-8"
+        className="relative overflow-hidden bg-dl-plum px-5 py-24 text-dl-text-on-dark sm:px-8"
       >
         <div className="relative z-10 mx-auto max-w-[1280px]">
           <RevealOnScroll>
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[--dl-rose]">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-dl-rose">
               02 — Haltung
             </p>
-            <h2 className="mt-4 max-w-[24ch] text-[clamp(1.9rem,3.6vw,2.8rem)] text-[--dl-text-on-dark]">
+            <h2 className="mt-4 max-w-[24ch] text-[clamp(1.9rem,3.6vw,2.8rem)] text-dl-text-on-dark">
               Ehrlichkeit, Verlässlichkeit, Integrität – hanseatisch eben.
             </h2>
-            <p className="mt-6 max-w-[64ch] text-[--dl-text-on-dark]/75">
+            <p className="mt-6 max-w-[64ch] text-dl-text-on-dark/75">
               Sie vertrauen uns das Herzstück Ihres Unternehmens an: den
               Kontakt zu Ihren Kunden. Deshalb schulen wir intensiv, betreuen
               eng und melden auch dann zurück, wenn eine Kampagne anders
@@ -217,12 +217,12 @@ export default function HomePage() {
       </section>
 
       {/* Kundenstimmen */}
-      <section className="relative border-t border-[--dl-ink]/8 bg-[--dl-cream] px-5 py-24 sm:px-8">
+      <section className="relative border-t border-dl-ink/8 bg-dl-cream px-5 py-24 sm:px-8">
         <div className="mx-auto max-w-[1280px]">
           <RevealOnScroll>
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
-                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[--dl-burgundy]">
+                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-dl-burgundy">
                   03 — Kundenstimmen
                 </p>
                 <h2 className="mt-4 text-[clamp(1.9rem,3.6vw,2.8rem)]">
@@ -230,8 +230,8 @@ export default function HomePage() {
                 </h2>
               </div>
               <div className="text-right">
-                <p className="text-[--dl-burgundy]">★★★★★</p>
-                <p className="mt-1 text-sm text-[--dl-ink]/60">
+                <p className="text-dl-burgundy">★★★★★</p>
+                <p className="mt-1 text-sm text-dl-ink/60">
                   4,5 auf Google · 27 Berichte
                 </p>
               </div>
@@ -246,7 +246,7 @@ export default function HomePage() {
           <RevealOnScroll delay={80}>
             <Link
               href="/kundenstimmen"
-              className="mt-10 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-[--dl-burgundy]"
+              className="mt-10 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-dl-burgundy"
             >
               Alle Stimmen <ArrowRight size={14} />
             </Link>
@@ -257,13 +257,13 @@ export default function HomePage() {
       {/* Zusammenarbeit */}
       <section
         data-globe="58,86,0.75"
-        className="relative border-t border-[--dl-ink]/8 bg-[--dl-cream] px-5 py-24 sm:px-8"
+        className="relative border-t border-dl-ink/8 bg-dl-cream px-5 py-24 sm:px-8"
       >
         <div className="mx-auto max-w-[1280px]">
           <RevealOnScroll>
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
-                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[--dl-burgundy]">
+                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-dl-burgundy">
                   04 — Zusammenarbeit
                 </p>
                 <h2 className="mt-4 max-w-[22ch] text-[clamp(1.9rem,3.6vw,2.8rem)]">
@@ -279,11 +279,11 @@ export default function HomePage() {
           <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {PROCESS_STEPS.map((step, i) => (
               <RevealOnScroll key={step.number} delay={i * 80}>
-                <p className="font-mono text-sm text-[--dl-burgundy]">
+                <p className="font-mono text-sm text-dl-burgundy">
                   {step.number}
                 </p>
                 <h3 className="mt-3 text-lg">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-[--dl-ink]/70">
+                <p className="mt-2 text-sm leading-relaxed text-dl-ink/70">
                   {step.text}
                 </p>
               </RevealOnScroll>

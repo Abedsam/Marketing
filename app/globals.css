@@ -19,10 +19,13 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-dl-burgundy: var(--dl-burgundy);
+  --color-dl-burgundy-hover: var(--dl-burgundy-hover);
   --color-dl-plum: var(--dl-plum);
+  --color-dl-globe-depth: var(--dl-globe-depth);
   --color-dl-rose: var(--dl-rose);
   --color-dl-cream: var(--dl-cream);
   --color-dl-ink: var(--dl-ink);
+  --color-dl-text-on-dark: var(--dl-text-on-dark);
   --font-sans: var(--font-archivo);
   --font-serif: var(--font-newsreader);
   --font-mono: var(--font-plex-mono);

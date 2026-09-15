@@ -8,16 +8,16 @@ export type Review = {
 
 function ReviewCard({ review }: { review: Review }) {
   return (
-    <div className="flex w-[320px] shrink-0 flex-col gap-3 rounded-[2px] border border-[--dl-ink]/10 bg-white/60 p-6">
-      <div className="flex gap-1 text-[--dl-burgundy]">
+    <div className="flex w-[320px] shrink-0 flex-col gap-3 rounded-[2px] border border-dl-ink/10 bg-white/60 p-6">
+      <div className="flex gap-1 text-dl-burgundy">
         {Array.from({ length: 5 }).map((_, i) => (
           <Star key={i} size={14} fill="currentColor" strokeWidth={0} />
         ))}
       </div>
-      <p className="text-sm leading-relaxed text-[--dl-ink]/80">
+      <p className="text-sm leading-relaxed text-dl-ink/80">
         &ldquo;{review.text}&rdquo;
       </p>
-      <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[--dl-ink]/45">
+      <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-dl-ink/45">
         {review.author}
         {review.source ? ` · ${review.source}` : ""}
       </p>

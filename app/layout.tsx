@@ -47,7 +47,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="de"
       className={`${newsreader.variable} ${archivo.variable} ${plexMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[--dl-cream] text-[--dl-ink]">
+      <body className="min-h-full flex flex-col bg-dl-cream text-dl-ink">
         <ScrollProgress />
         <WanderingGlobe />
         <SiteHeader />
