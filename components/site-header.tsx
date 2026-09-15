@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { BASE_PATH } from "@/lib/base-path";
 
 const NAV_LINKS = [
   { href: "/call-center-services", label: "Services" },
@@ -28,12 +29,15 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-[60] border-b border-dl-ink/8 bg-dl-cream/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-5 sm:px-8">
-        <Link
-          href="/"
-          className="font-serif text-lg tracking-tight text-dl-ink"
-          onClick={() => setOpen(false)}
-        >
-          Direct Line
+        <Link href="/" onClick={() => setOpen(false)}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={`${BASE_PATH}/logo.png`}
+            alt="Direct Line"
+            width={183}
+            height={85}
+            className="h-9 w-auto"
+          />
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">

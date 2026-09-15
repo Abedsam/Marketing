@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BASE_PATH } from "@/lib/base-path";
 
 const LEISTUNGEN_LINKS = [
   { href: "/call-center-services", label: "Call-Center-Services" },
@@ -26,7 +27,14 @@ export function SiteFooter() {
       <div className="mx-auto max-w-[1280px] px-5 py-16 sm:px-8">
         <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <p className="font-serif text-xl text-dl-ink">Direct Line</p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`${BASE_PATH}/logo.png`}
+              alt="Direct Line"
+              width={183}
+              height={85}
+              className="h-9 w-auto"
+            />
             <p className="mt-3 max-w-[26ch] text-sm text-dl-ink/65">
               Ihr Callcenter in Hamburg seit 1995.
             </p>
