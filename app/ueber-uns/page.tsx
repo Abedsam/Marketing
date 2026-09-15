@@ -29,7 +29,7 @@ export default function UeberUnsPage() {
         data-globe="34,80,0.9"
         className="relative flex min-h-[60vh] items-center px-5 py-24 sm:px-8"
       >
-        <div className="mx-auto max-w-[1280px]">
+        <div className="w-full mx-auto max-w-[1280px]">
           <RevealOnScroll>
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-dl-burgundy">
               Über uns

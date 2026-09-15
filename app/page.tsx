@@ -87,7 +87,7 @@ export default function HomePage() {
         data-globe="46,74,1.15"
         className="relative flex min-h-[92vh] items-center px-5 py-20 sm:px-8"
       >
-        <div className="mx-auto max-w-[1280px]">
+        <div className="w-full mx-auto max-w-[1280px]">
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-dl-burgundy">
             Callcenter Hamburg · seit 1995
           </p>
@@ -150,7 +150,7 @@ export default function HomePage() {
         data-globe="30,18,0.55"
         className="relative border-t border-dl-ink/8 bg-dl-cream px-5 py-24 sm:px-8"
       >
-        <div className="mx-auto max-w-[1280px]">
+        <div className="w-full mx-auto max-w-[1280px]">
           <RevealOnScroll>
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-dl-burgundy">
               01 — Leistungen
@@ -198,7 +198,7 @@ export default function HomePage() {
         data-globe-dark="true"
         className="relative overflow-hidden bg-dl-plum px-5 py-24 text-dl-text-on-dark sm:px-8"
       >
-        <div className="relative z-10 mx-auto max-w-[1280px]">
+        <div className="relative z-10 w-full mx-auto max-w-[1280px]">
           <RevealOnScroll>
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-dl-rose">
               02 — Haltung
@@ -218,7 +218,7 @@ export default function HomePage() {
 
       {/* Kundenstimmen */}
       <section className="relative border-t border-dl-ink/8 bg-dl-cream px-5 py-24 sm:px-8">
-        <div className="mx-auto max-w-[1280px]">
+        <div className="w-full mx-auto max-w-[1280px]">
           <RevealOnScroll>
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
@@ -259,7 +259,7 @@ export default function HomePage() {
         data-globe="58,86,0.75"
         className="relative border-t border-dl-ink/8 bg-dl-cream px-5 py-24 sm:px-8"
       >
-        <div className="mx-auto max-w-[1280px]">
+        <div className="w-full mx-auto max-w-[1280px]">
           <RevealOnScroll>
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>

@@ -43,7 +43,7 @@ export default function CallCenterServicesPage() {
         data-globe="26,86,0.7"
         className="relative flex min-h-[60vh] items-center px-5 py-24 sm:px-8"
       >
-        <div className="mx-auto max-w-[1280px]">
+        <div className="w-full mx-auto max-w-[1280px]">
           <RevealOnScroll>
             <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-dl-burgundy">
               Call-Center-Services
@@ -61,7 +61,7 @@ export default function CallCenterServicesPage() {
       </section>
 
       <section className="relative border-t border-dl-ink/8 bg-dl-cream px-5 py-24 sm:px-8">
-        <div className="mx-auto max-w-[1280px]">
+        <div className="w-full mx-auto max-w-[1280px]">
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {SERVICES.map((service, i) => (
               <RevealOnScroll key={service.title} delay={(i % 3) * 80}>
@@ -82,7 +82,7 @@ export default function CallCenterServicesPage() {
         data-globe-dark="true"
         className="relative overflow-hidden bg-dl-plum px-5 py-24 text-dl-text-on-dark sm:px-8"
       >
-        <div className="relative z-10 mx-auto max-w-[1280px]">
+        <div className="relative z-10 w-full mx-auto max-w-[1280px]">
           <RevealOnScroll>
             <h2 className="max-w-[24ch] text-[clamp(1.9rem,3.6vw,2.8rem)] text-dl-text-on-dark">
               Sie wissen noch nicht, welches Modell passt?
