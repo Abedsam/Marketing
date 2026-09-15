@@ -1,21 +1,60 @@
 "use client";
 
-import { useActionState } from "react";
+import { useState, type FormEvent } from "react";
+import { z } from "zod";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { submitContactForm, type ContactFormState } from "./actions";
 
-const initialState: ContactFormState = { status: "idle" };
+const contactSchema = z.object({
+  name: z.string().trim().min(2, "Bitte geben Sie Ihren Namen ein."),
+  email: z
+    .string()
+    .trim()
+    .email("Bitte geben Sie eine gültige E-Mail-Adresse ein."),
+  message: z
+    .string()
+    .trim()
+    .min(10, "Ihre Nachricht sollte mindestens 10 Zeichen lang sein."),
+});
+
+type Errors = Partial<Record<"name" | "email" | "message", string>>;
 
 export function ContactForm() {
-  const [state, formAction, pending] = useActionState(
-    submitContactForm,
-    initialState
-  );
+  const [errors, setErrors] = useState<Errors>({});
+  const [success, setSuccess] = useState(false);
+  const [pending, setPending] = useState(false);
 
-  if (state.status === "success") {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const parsed = contactSchema.safeParse({
+      name: formData.get("name"),
+      email: formData.get("email"),
+      message: formData.get("message"),
+    });
+
+    if (!parsed.success) {
+      const fieldErrors = parsed.error.flatten().fieldErrors;
+      setErrors({
+        name: fieldErrors.name?.[0],
+        email: fieldErrors.email?.[0],
+        message: fieldErrors.message?.[0],
+      });
+      return;
+    }
+
+    setErrors({});
+    setPending(true);
+    // Demo-Formular – im Live-Betrieb wird die Nachricht versendet.
+    window.setTimeout(() => {
+      setPending(false);
+      setSuccess(true);
+    }, 400);
+  }
+
+  if (success) {
     return (
       <div className="rounded-[2px] border border-dl-burgundy/30 bg-dl-burgundy/5 p-8">
         <p className="text-dl-ink">
@@ -26,30 +65,28 @@ export function ContactForm() {
   }
 
   return (
-    <form action={formAction} className="flex flex-col gap-6">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <Label htmlFor="name">Name</Label>
         <Input id="name" name="name" required />
-        {state.errors?.name && (
-          <p className="text-xs text-dl-burgundy">{state.errors.name}</p>
+        {errors.name && (
+          <p className="text-xs text-dl-burgundy">{errors.name}</p>
         )}
       </div>
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="email">E-Mail</Label>
         <Input id="email" name="email" type="email" required />
-        {state.errors?.email && (
-          <p className="text-xs text-dl-burgundy">{state.errors.email}</p>
+        {errors.email && (
+          <p className="text-xs text-dl-burgundy">{errors.email}</p>
         )}
       </div>
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="message">Nachricht</Label>
         <Textarea id="message" name="message" rows={5} required />
-        {state.errors?.message && (
-          <p className="text-xs text-dl-burgundy">
-            {state.errors.message}
-          </p>
+        {errors.message && (
+          <p className="text-xs text-dl-burgundy">{errors.message}</p>
         )}
       </div>
 
