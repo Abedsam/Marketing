@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+:root {
+  /* Design tokens — exact values from the approved design prototype */
+  --dl-burgundy: #7c1d2f;
+  --dl-burgundy-hover: #6a1827;
+  --dl-plum: #2a0810;
+  --dl-globe-depth: #4f1220;
+  --dl-rose: #e9a9b6;
+  --dl-cream: #fbf8f6;
+  --dl-ink: #1a1416;
+  --dl-text-on-dark: #f6ecee;
+
+  --background: var(--dl-cream);
+  --foreground: var(--dl-ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-dl-burgundy: var(--dl-burgundy);
+  --color-dl-plum: var(--dl-plum);
+  --color-dl-rose: var(--dl-rose);
+  --color-dl-cream: var(--dl-cream);
+  --color-dl-ink: var(--dl-ink);
+  --font-sans: var(--font-archivo);
+  --font-serif: var(--font-newsreader);
+  --font-mono: var(--font-plex-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-archivo), "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+/* Reveal-on-scroll starting state (Framer Motion controls the transition) */
+.dl-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* Marquee */
+@keyframes dlMarquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes dlMarqueeBack {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+.dl-marquee-track {
+  animation: dlMarquee linear infinite;
+}
+.dl-marquee-track--reverse {
+  animation-name: dlMarqueeBack;
+}
+.dl-marquee-wrap:hover .dl-marquee-track {
+  animation-play-state: paused;
+}
+
+/* Globe: pure-CSS rotating sphere */
+@keyframes dlRoll {
+  to { background-position: -600px 0; }
+}
+@keyframes dlSpin {
+  to { transform: rotate(360deg); }
+}
+@keyframes dlPulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.65; transform: scale(1.05); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .dl-marquee-track {
+    animation-play-state: paused !important;
+  }
+}
+
+/* ================= Wandering globe =================
+   Pure-CSS rotating planet, fixed to the viewport. JS sets the three custom
+   properties below (see components/wandering-globe.tsx); this file only
+   describes how the globe looks and how it responds to those variables. */
+.dl-globe-wrap {
+  --dl-globe-top: 46vh;
+  --dl-globe-left: 74vw;
+  --dl-globe-scale: 1.15;
+  --dl-globe-size: 480px;
+
+  position: fixed;
+  top: var(--dl-globe-top);
+  left: var(--dl-globe-left);
+  width: var(--dl-globe-size);
+  height: var(--dl-globe-size);
+  z-index: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(var(--dl-globe-scale));
+  transition:
+    top 1.5s cubic-bezier(0.22, 1, 0.3, 1),
+    left 1.5s cubic-bezier(0.22, 1, 0.3, 1),
+    transform 1.5s cubic-bezier(0.22, 1, 0.3, 1),
+    opacity 0.6s ease;
+  will-change: top, left, transform;
+}
+.dl-globe-wrap.dl-globe-no-transition {
+  transition: none;
+}
+.dl-globe-wrap[data-narrow="true"] {
+  transform: translate(-20%, -50%) scale(calc(var(--dl-globe-scale) * 0.85));
+  opacity: 0.55;
+}
+
+.dl-globe-sphere {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: radial-gradient(
+    circle at 32% 26%,
+    #b3405a 0%,
+    var(--dl-burgundy) 40%,
+    var(--dl-globe-depth) 76%,
+    var(--dl-plum) 100%
+  );
+  box-shadow:
+    inset -70px -50px 100px rgba(0, 0, 0, 0.55),
+    inset 26px 18px 60px rgba(255, 255, 255, 0.07);
+}
+
+.dl-globe-texture {
+  position: absolute;
+  inset: -12%;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.4) 1.4px, transparent 1.4px);
+  background-size: 24px 24px;
+  opacity: 0.16;
+  animation: dlRoll 42s linear infinite;
+}
+
+.dl-globe-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(233, 169, 182, 0.32);
+  animation: dlSpin linear infinite;
+}
+.dl-globe-ring--outer {
+  inset: -16%;
+  animation-duration: 70s;
+}
+.dl-globe-ring--inner {
+  inset: -7%;
+  border-color: rgba(233, 169, 182, 0.2);
+  animation-duration: 100s;
+  animation-direction: reverse;
+}
+
+.dl-globe-wrap[data-reduced-motion="true"] .dl-globe-texture,
+.dl-globe-wrap[data-reduced-motion="true"] .dl-globe-ring {
+  animation: none;
+}
+
+@media (max-width: 640px) {
+  .dl-globe-wrap {
+    --dl-globe-size: 320px;
+  }
+}
